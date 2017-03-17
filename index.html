@@ -20,6 +20,8 @@
   </head>
   <body>
   <div>
+
+    <!-- create a drop down menu -->
     <label for="xdropdown">State: </label><select id="xdropdown" name="state" size="1">
     <option value="AK">AK</option>
     <option value="AL">AL</option>
@@ -75,15 +77,11 @@
   </select>
   </div>
 
+  <!-- create a update button after selecting the states -->
+
   <div style="display: table-cell; width: 150;">
   <button id="update" onclick="updateClicked()">Update</button>
   </div>
-
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <!-- Include all compiled plugins (below), or include individual files as needed -->
-    <script src="../lib/Bootstrap/js/bootstrap.min.js"></script>
-
     <script>
     var w = 700;
     var h = 600;
@@ -94,25 +92,22 @@
             .attr("width", w+legend)
             .attr("height", h);
 
-    d3.csv("Cleaned College Data.csv", callback);
+    d3.csv("cleaned_college_data.csv", callback);
 
-// Returns the selected option in the X-axis dropdown.
+    // Returns the selected option in the X-axis dropdown.
     function getSelectedOption(){
       var node = d3.select('#xdropdown').node();
       var i = node.selectedIndex;
       return node[i].value;
     }
 
-
+    // Update upon click
     function updateClicked(){
-      d3.csv('Cleaned College Data.csv',callback);
+      d3.csv('cleaned_college_data.csv',callback);
     }
 
 
-
-
     function callback(data){
-      //console.log(getSelectedOption());
 
       var dollar = d3.format("$,");
       var percent = d3.format("%,");
@@ -139,6 +134,8 @@
       var y = d3.scale.linear();
       var z = d3.scale.linear();
 
+      //define ranges for each axis
+
       x.domain([d3.min(data_st, function(d){return +d.md_earn;})*0.8, d3.max(data_st, function(d){return +d.md_earn;})*1.1]);
       x.range([padding,w-padding]);
 
@@ -154,6 +151,7 @@
 
       var o = d3.scale.ordinal().domain(["1","2","3"]).range(["#d7191c","#fdae61","#2b83ba"]);
 
+      //draw the x,y axis
       var xAxis = d3.svg.axis().scale(x).orient("bottom").tickFormat(dollar).ticks(8);
       var yAxis = d3.svg.axis().scale(y).orient("left").tickFormat(dollar).ticks(10);
 
@@ -163,7 +161,7 @@
       plot.append("g").attr("class", "axis").call(yAxis)
       .attr("transform", "translate("+ padding + ",0)");
 
-
+      //draw the main body of the scatter polot
       plot.selectAll("circle").data(data_st).enter()
       .append("circle")
       .attr("cx", function(d){return x(d.md_earn);})
@@ -183,8 +181,9 @@
         show_info(d);
       });
 
-
       d3.selectAll(".info").remove();
+
+      //draw the college information on the right side of the panel
 
       var info = plot.append("g").attr("class", "info1")
       .attr("transform", "translate(0," + 6 + ")");
@@ -233,9 +232,7 @@
       .text("# of Undergraduate Student: " )
       .style("fill", "black");
 
-
-      //label
-
+      //create labels
       plot.append("text")
       .attr("class", "label")
       .attr("text-anchor", "end")
@@ -256,7 +253,7 @@
       .attr("font-family", "sans-serif")
       .attr("font-size", 10);
 
-      //title
+      //draw a title
        plot.append("text")
       .attr("class", "title")
       .attr("text-anchor", "middle")
@@ -266,7 +263,7 @@
       .attr("font-family", "sans-serif")
       .attr("font-size", 15);
 
-      //legend
+      //draw a legend
       var legend = plot.selectAll(".legend")
       .data(["1","2","3"])
       .enter().append("g")
@@ -363,30 +360,7 @@
         .text(d.ug_size)
         .style("fill", "black");
     }
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </script>
   </body>
 </html>

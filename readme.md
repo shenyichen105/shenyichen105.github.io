@@ -1,0 +1,1 @@
+The idea is that I would like to analyze how student debt can be repaid in the future given the degree of an institution. Thus I designed a scatter plot with different sizes and colors and user can interact with selecting different states, clicking and hovering.  
